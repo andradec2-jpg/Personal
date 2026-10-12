@@ -2,13 +2,13 @@
 
 ## Messenger
 
-> **Document Status:** Draft
-> **Student:** Caitlyn Andrade
-> **Faculty Mentor:** Nick Stiffler
-> **Project Period:** 9/30 - 11/2
-> **Expected Effort:**
-> **Version:** 0.1
-> **Last Updated:** 
+> **Document Status:** Draft 
+> **Student:** Caitlyn Andrade 
+> **Faculty Mentor:** Nick Stiffler 
+> **Project Period:** 9/30 - 11/2 
+> **Expected Effort:** 5-10 hours per week 
+> **Version:** 0.1 
+> **Last Updated:** 10/12 
 
 ---
 
@@ -140,20 +140,20 @@ gantt
     Ethics Reflection (IA-05)        :done,    eth, 2026-09-30, 2026-10-12
 
     section Development
-    Data Model                       :active,  dm, 2026-10-13, 2026-10-15
-    Private Messaging                :pm,      2026-10-15, 2026-10-20
-    Group Messaging                  :gm,      2026-10-20, 2026-10-24
+    Data Model                       :active,  dm, 2026-10-12, 2026-10-20
+    Private Messaging                :pm,      2026-10-18, 2026-10-25
+    Group Messaging                  :gm,      2026-10-20, 2026-10-25
 
     section Integration & Verification
-    Integration Testing              :int,     2026-10-24, 2026-10-27
+    Integration Testing              :int,     2026-10-24, 2026-10-28
     Verification & Corrections       :ver,     2026-10-27, 2026-10-30
 
     section Delivery
-    Final Review & Delivery          :del,     2026-10-30, 2026-11-02
+    Final Review & Delivery          :del,     2026-10-29, 2026-11-02
 ```
 ---
 
-##7. Acceptance
+## 7. Acceptance
 
 Messenger will be considered complete when:
 
