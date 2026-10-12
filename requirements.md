@@ -14,13 +14,9 @@ in group-based conversations. The system boundary includes:
 	- **Authentication Service -** external or internal module that verifies user credentials.
 	- **Persistent Storage -** stores user accounts, groups, and messages.
 
-The context establishes the boundary between Messenger and external systems that interact with it.
-
 ---
 
 ## 2. Functional Requirements
-
-Functional requirements use stable identifiers (FR-xx). Each expresses a clear obligation of the system.
 
 ### User Accounts & Authentication
 
@@ -71,8 +67,6 @@ Functional requirements use stable identifiers (FR-xx). Each expresses a clear o
 
 ## 3. Non-functional requirements
 
-Non-functional requirements use stable identifiers (NFR-xx). Each is specific and verifiable.
-
 ### Security
 
 - **NFR-01 -** The system shall protect user credentials using secure hashing.
@@ -102,8 +96,6 @@ operation.
 ---
 
 ## 4. Acceptance Criteria
-
-Acceptance criteria make expected behavior observable.
 
 ### FR-04 - Send Private Message
 
@@ -147,8 +139,6 @@ Acceptance criteria make expected behavior observable.
 - Should group creators have special privileges (E.g., removing members)?
 - Should deleted accounts retain message history or anonymize it?
 - Should the system support mesage editing or deletion?
-
-These questions require stakeholder clarification and are not answered by inventing details.
 
 ---
 

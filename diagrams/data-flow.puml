@@ -1,49 +1,77 @@
 @startuml
-title Messenger - Data Flow Diagram (DFD Level 1)
+title Messenger - Data Flow Diagram
 
-' External Entities
+top to bottom direction
+
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultFontSize 12
+skinparam nodesep 90
+skinparam ranksep 85
+skinparam padding 15
+skinparam ArrowFontSize 10
+skinparam ArrowThickness 1
+
+skinparam rectangle {
+    RoundCorner 0
+}
+
+' External entities
 rectangle "Registered User" as User
 rectangle "System Administrator" as Admin
 
 ' Processes
-circle "Authenticate User" as P1
-circle "Send Private Message" as P2
-circle "Send Group Message" as P3
-circle "Manage Group Membership" as P4
-circle "Admin Account/Group Actions" as P5
+rectangle "1.0\nAuthenticate User" as P1
+rectangle "2.0\nSend Private Message" as P2
+rectangle "3.0\nSend Group Message" as P3
+rectangle "4.0\nManage Group Membership" as P4
+rectangle "5.0\nAdmin Actions" as P5
 
-' Data Stores
-database "User Accounts" as DS1
-database "Messages" as DS2
-database "Groups" as DS3
+' Data stores
+database "D1: User Accounts" as DS1
+database "D2: Messages" as DS2
+database "D3: Groups" as DS3
 
-' Authentication Flow
-User --> P1 : login credentials
-P1 --> DS1 : verify credentials
-P1 --> User : auth result
+' Main user flow
+User -down-> P1 : login credentials
+P1 -down-> P2 : authenticated user
+P2 -down-> P3 : message request
+P3 -down-> P4 : group request
 
-' Private Messaging Flow
-User --> P2 : private message content
-P2 --> DS2 : store private message
-DS2 --> User : deliver message to recipient
+' Authentication
+P1 -right-> DS1 : verify credentials
+DS1 -left-> P1 : authentication result
 
-' Group Messaging Flow
-User --> P3 : group message content
-P3 --> DS3 : verify membership
-P3 --> DS2 : store group message
-DS2 --> User : deliver message to group members
+' Private messaging
+P2 -right-> DS2 : store private message
+DS2 -left-> P2 : message delivery
 
-' Group Membership Flow
-User --> P4 : join/leave group request
-P4 --> DS3 : update membership
-DS3 --> User : membership confirmation
+' Group messaging
+P3 -right-> DS2 : store group message
+P3 -right-> DS3 : check membership
+DS3 -left-> P3 : member list
 
-' Admin Actions
-Admin --> P5 : deactivate user / remove group
-P5 --> DS1 : update user status
-P5 --> DS3 : remove group
+' Membership management
+P4 -right-> DS3 : update membership
+DS3 -left-> P4 : membership result
 
+' Administration
+Admin -down-> P5 : admin request
+P5 -right-> DS1 : update user status
+P5 -down-> DS3 : remove group
+
+' Layout controls: align entities and stores
+User -[hidden]right- Admin
+P1 -[hidden]right- P5
+P2 -[hidden]right- DS1
+P3 -[hidden]right- DS2
+P4 -[hidden]right- DS3
+
+' Layout adjustments
+P3 -[hidden]up-> P2
+P5 -[hidden]left-> P1
+
+' Keep the data stores in a consistent vertical order
+DS1 -[hidden]down- DS2
+DS2 -[hidden]down- DS3
 @enduml
-
-
-

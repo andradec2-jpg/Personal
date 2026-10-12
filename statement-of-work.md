@@ -2,13 +2,13 @@
 
 ## Messenger
 
-> **Document Status:** Draft 
-> **Student:** Caitlyn Andrade 
-> **Faculty Mentor:** Nick Stiffler 
-> **Project Period:** 9/30 - 11/2 
-> **Expected Effort:** 5-10 hours per week 
-> **Version:** 0.1 
-> **Last Updated:** 10/12 
+> **Document Status:** Draft  
+> **Student:** Caitlyn Andrade  
+> **Faculty Mentor:** Nick Stiffler  
+> **Project Period:** 9/30 - 11/2  
+> **Expected Effort:** 5-10 hours per week  
+> **Version:** 0.1  
+> **Last Updated:** 10/12  
 
 ---
 
@@ -25,8 +25,6 @@ large commercial platforms. The primary objectives are:
 - Provide group-based messaging that allows multiple users to participate in shared conversations.
 - Deliver a system with clearly defined scope, traceable reuirements, and reviewable artifacts.
 - Produce a working prototype suitable for evaluation by November 2, 2026.
-
-These objectives describe outcomes, not implementation details
 
 ---
 
@@ -68,8 +66,6 @@ To maintain a defensible boundary, the following are **not** included:
 - End-to-end encryption beyond basic secure transport assumptions.
 - Enterprise-scale scalability or performance guarantees. 
 
-The scope focuses on coherent, achievable messaging system rather than a commercial-grade platform.
-
 ---
 
 ## 4. Deliverables
@@ -84,8 +80,6 @@ The project will produce the following reviewable artifacts:
 - **Ethics Reflection (IA-05)**
 - **Gantt chart and schedule source**
 - **Repository containing all artifacts, diagrams, and source code**
-
-Delivarable are observable and reviewable; activities such as "write code" are not listed as deliverables.
 
 ---
 
@@ -164,4 +158,3 @@ Messenger will be considered complete when:
 - The repository contains no secrets, temprorary files, or unrelated material.
 - The client can observe the implemented behavior directly.
 
-Acceptance is based on observable evidence, not subjective satisfaction. 
