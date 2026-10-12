@@ -1,0 +1,49 @@
+@startuml
+title Messenger - Data Flow Diagram (DFD Level 1)
+
+' External Entities
+rectangle "Registered User" as User
+rectangle "System Administrator" as Admin
+
+' Processes
+circle "Authenticate User" as P1
+circle "Send Private Message" as P2
+circle "Send Group Message" as P3
+circle "Manage Group Membership" as P4
+circle "Admin Account/Group Actions" as P5
+
+' Data Stores
+database "User Accounts" as DS1
+database "Messages" as DS2
+database "Groups" as DS3
+
+' Authentication Flow
+User --> P1 : login credentials
+P1 --> DS1 : verify credentials
+P1 --> User : auth result
+
+' Private Messaging Flow
+User --> P2 : private message content
+P2 --> DS2 : store private message
+DS2 --> User : deliver message to recipient
+
+' Group Messaging Flow
+User --> P3 : group message content
+P3 --> DS3 : verify membership
+P3 --> DS2 : store group message
+DS2 --> User : deliver message to group members
+
+' Group Membership Flow
+User --> P4 : join/leave group request
+P4 --> DS3 : update membership
+DS3 --> User : membership confirmation
+
+' Admin Actions
+Admin --> P5 : deactivate user / remove group
+P5 --> DS1 : update user status
+P5 --> DS3 : remove group
+
+@enduml
+
+
+

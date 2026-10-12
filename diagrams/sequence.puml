@@ -1,0 +1,27 @@
+@startuml
+title Messenger - Sequence Diagram (Group Message Scenario)
+
+actor User
+participant "Messenger UI" as UI
+participant "Messenger Backend" as BE
+database "Groups Store" as GS
+database "Messages Store" as MS
+
+User -> UI : Select group + enter message
+UI -> BE : sendGroupMessage(groupId, message)
+
+BE -> GS : verifyMembership(userId, groupId)
+GS --> BE : membershipStatus
+
+alt user IS member
+    BE -> MS : storeGroupMessage(groupId, userId, message)
+    MS --> BE : success
+    BE -> UI : deliveryConfirmation
+    UI --> User : "Message delivered"
+else user NOT member
+    BE -> UI : error("User not in group")
+    UI --> User : "Cannot send message"
+end
+
+@enduml
+
