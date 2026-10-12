@@ -128,6 +128,7 @@ The schedule targets completion before November 2, leaving time for integration,
 
 ### Gantt Chart
 
+```mermaid
 gantt
     dateFormat  YYYY-MM-DD
     title Messenger Project Schedule
@@ -149,7 +150,7 @@ gantt
 
     section Delivery
     Final Review & Delivery          :del,     2026-10-30, 2026-11-02
-
+```
 ---
 
 ##7. Acceptance
