@@ -9,8 +9,8 @@
 The DFD answers:
 **Where does information come from, where does it go, what transforms it, and what must persist?**
 
-It clarifies the movement of authentication data, private messages, group messages, and membership updates across
- processes and data stroes. 
+It clarifies the movement of authentication data, private messages, group messages, and membership updates across 
+processes and data stores. 
 
 ### Requirements Represented 
 
@@ -63,7 +63,7 @@ fails.
 ### Ambiguity or Missing Requirement Discovered
 
 The diagram exposes a missing detail:
-**Should group creators or admins have special privileges (e.g., sending mesages even if removed)?**
+**Should group creators or admins have special privileges (e.g., sending messages even if removed)?**
 
 This is already listed as an unresolved question in IA-03, and the diagram reinforces that this ambiguity affects 
 runtime behavior.

@@ -34,7 +34,7 @@ in group-based conversations. The system boundary includes:
 - **FR-05 -** The system shall deliver private messages to the intended recipient. 
 *Traceability:* Core messaging behavior.
 - **FR-06 -** The system shall store private messages persistently
-*Traceability:* Requirement for mesage history and reliability.
+*Traceability:* Requirement for message history and reliability.
 
 ### Group Messaging
 
@@ -54,7 +54,7 @@ in group-based conversations. The system boundary includes:
 - **FR-12 -** The system shall allow users to leave a group.
 *Traceability:* Basic group lifecycle behavior.
 - **FR-13 -** The system shall allow users to view the list of current group members.
-*Traceablity:* Transparency and usability.
+*Traceability:* Transparency and usability.
 
 ### Administrative Functions
 
@@ -135,10 +135,10 @@ operation.
 
 ### Unresolved Questions
 
-- Should administrators be abl eot read private messages for moderation purposes?
-- Should group creators have special privileges (E.g., removing members)?
+- Should administrators be able to read private messages for moderation purposes?
+- Should group creators have special privileges (e.g., removing members)?
 - Should deleted accounts retain message history or anonymize it?
-- Should the system support mesage editing or deletion?
+- Should the system support message editing or deletion?
 
 ---
 
@@ -150,11 +150,11 @@ Each requirement is traceable to:
 - **Scope decisions** (in-scope vs. out-of-scope functionality).
 - **Stakeholder needs** (users, administrators).
 - **Constraints** (November 2 deadline, repository submission rules).
-- **Engineering decisions** (persistent storage, authenticaiton).
+- **Engineering decisions** (persistent storage, authentication).
 
 Examples:
 
-- **FR-04** (privatie mesaging) -> directly traceable to the project objective: "allow private messages between
+- **FR-04** (private messaging) -> directly traceable to the project objective: "allow private messages between
  users."
 - **FR-09** (group messaging) -> traceable to the objective: "group-based messaging involving multiple users."
 - **NFR-08** -> traceable to the explicit course constraint: November 2 final delivery deadline.

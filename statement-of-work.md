@@ -23,12 +23,12 @@ large commercial platforms. The primary objectives are:
 
 - Provide a secure, reliable channel for private messages between two registered users.
 - Provide group-based messaging that allows multiple users to participate in shared conversations.
-- Deliver a system with clearly defined scope, traceable reuirements, and reviewable artifacts.
+- Deliver a system with clearly defined scope, traceable requirements, and reviewable artifacts.
 - Produce a working prototype suitable for evaluation by November 2, 2026.
 
 ---
 
-## 2. Stakholders
+## 2. Stakeholders
 
 | Stakeholder | Relationship to Project |
 |---|---|
@@ -73,7 +73,7 @@ To maintain a defensible boundary, the following are **not** included:
 The project will produce the following reviewable artifacts:
 
 - **Functional Messenger prototype** implementing private and group messaging.
-- **Statement of Work (!A-02)**
+- **Statement of Work (IA-02)**
 - **Requirements document (IA-03)**
 - **Data Flow Diagram and Sequence Diagram (IA-04)**
 - **Modeling analysis (IA-04)**
@@ -153,8 +153,9 @@ Messenger will be considered complete when:
 
 - The functional prototype demonstrates private and group messaging.
 - All required artifacts exist at the correct repository paths and render correctly.
-- Requirements, diagrams, and analysis are internally consistent and tracable.
+- Requirements, diagrams, and analysis are internally consistent and traceable.
 - The system passes basic functional tests for sending, receiving, and storing messages.
-- The repository contains no secrets, temprorary files, or unrelated material.
+- The system delivers both private and group messages within 2 seconds under normal load.
+- The repository contains no secrets, temporary files, or unrelated material.
 - The client can observe the implemented behavior directly.
 

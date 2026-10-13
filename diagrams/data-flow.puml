@@ -75,10 +75,3 @@ P5 -[hidden]left-> P1
 DS1 -[hidden]down- DS2
 DS2 -[hidden]down- DS3
 @enduml
-<<<<<<< HEAD
-=======
-
-
-
-
->>>>>>> 9edda0588bf7184c7c836ca08894ceb9e038d534

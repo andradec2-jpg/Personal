@@ -141,7 +141,7 @@
 
 #### Positive Impacts
 
-- Messenger strangthens interpersonal relationships through private messaging. 
+- Messenger strengthens interpersonal relationships through private messaging. 
 - Group messaging supports collaboration, shared interests, and community engagement.
 
 #### Negative Impacts
@@ -152,7 +152,7 @@
 #### Mitigations
 
 - Provide clear operational guidelines for respectful communication.
-- Add notification controls in furture versions.
+- Add notification controls in future versions.
 
 ---
  
@@ -213,15 +213,15 @@ Enforce strict membership validation before message delivery (already present in
 	- **FR-10** (deliver group messages only to members)
 	- **NFR-04** *meaningful error handling)
 
-#### Traceabiliy
+#### Traceability
 
 The sequence diagram explicitly models this failure path, demonstrating how ethical concerns map to runtime behavior.
 
 ---
  
-## 3. AI Assisted Work
+## 3. AI-Assisted Work
 
-I used AI to assist in creating the PlantUML diagrams in IA-04 because I am not familiar with tool. Even with this
+I used AI to assist in creating the PlantUML diagrams in IA-04 because I am not familiar with the tool. Even with this
 assistance I had to be heavily involved with the process to ensure it produced a diagram I was happy with. This was 
 especially applicable when creating the data flow diagram. The initial diagram produced was all over the place and
 not pleasing to look at. I rejected this diagram and it took multiple iterations and even switching AI systems to 
