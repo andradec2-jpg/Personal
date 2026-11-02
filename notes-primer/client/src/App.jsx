@@ -1,151 +1,242 @@
-import { useEffect, useState } from 'react';
-import { getNotes, createNote } from './api.js';
-import NotesList from './NotesList.jsx';
+import {
+  useCallback,
+  useEffect,
+  useState
+} from 'react';
+
+import {
+  login,
+  listBoards
+} from './studyApi.js';
+
+import LoginForm
+  from './LoginForm.jsx';
+
+import BoardList
+  from './BoardList.jsx';
+
+import StudyBoardPanel
+  from './StudyBoardPanel.jsx';
 
 export default function App() {
-  const [notes, setNotes] = useState([]);
-  const [text, setText] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [loadFailed, setLoadFailed] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState('');
+  const [session, setSession] =
+    useState(null);
 
-  useEffect(() => {
-    const controller = new AbortController();
+  const [
+    loginBusy,
+    setLoginBusy
+  ] = useState(false);
 
-    async function load() {
-      try {
-        const result =
-          await getNotes(controller.signal);
+  const [
+    loginError,
+    setLoginError
+  ] = useState('');
 
-        if (
-          controller.signal.aborted === false
-        ) {
-          setNotes(result.notes);
-        }
-      } catch (err) {
-        if (
-          controller.signal.aborted === false
-        ) {
-          setLoadFailed(true);
-          setError(
-            `Could not load notes: ${err.message}`
-          );
-        }
-      } finally {
-        if (
-          controller.signal.aborted === false
-        ) {
-          setLoading(false);
-        }
-      }
-    }
+  const [boards, setBoards] =
+    useState([]);
 
-    void load();
+  const [
+    selectedId,
+    setSelectedId
+  ] = useState(null);
 
-    return () => controller.abort();
-  }, []);
+  const [
+    boardsBusy,
+    setBoardsBusy
+  ] = useState(false);
 
-  async function handleSubmit(event) {
-    event.preventDefault();
+  const [
+    boardsError,
+    setBoardsError
+  ] = useState('');
 
-    if (
-      saving ||
-      loading ||
-      loadFailed
-    ) {
-      return;
-    }
+  const endSession =
+    useCallback(
+      (message = '') => {
+        setSession(null);
+        setBoards([]);
+        setSelectedId(null);
+        setLoginError(message);
+      },
+      []
+    );
 
-    const value = text.trim();
-
-    if (
-      value.length < 1 ||
-      value.length > 280
-    ) {
-      setError('Enter 1-280 characters');
-      return;
-    }
-
-    setSaving(true);
-    setError('');
+  async function handleLogin(
+    username,
+    password
+  ) {
+    setLoginBusy(true);
+    setLoginError('');
 
     try {
       const result =
-        await createNote(value);
+        await login(
+          username,
+          password
+        );
 
-      setNotes((current) =>
-        [result.note, ...current].slice(0, 50)
-      );
-
-      setText('');
+      setSession({
+        token: result.token,
+        user: result.user
+      });
     } catch (err) {
-      setError(
-        `Could not create note: ${err.message}`
+      setLoginError(
+        err.message
       );
     } finally {
-      setSaving(false);
+      setLoginBusy(false);
     }
   }
 
+  useEffect(() => {
+    if (session === null) {
+      return;
+    }
+
+    const controller =
+      new AbortController();
+
+    setBoardsBusy(true);
+    setBoardsError('');
+
+    listBoards(
+      session.token,
+      controller.signal
+    )
+      .then(result => {
+        if (
+          controller.signal.aborted
+        ) {
+          return;
+        }
+
+        setBoards(
+          result.boards
+        );
+
+        setSelectedId(
+          result.boards[0]?.id ??
+            null
+        );
+      })
+      .catch(err => {
+        if (
+          controller.signal.aborted
+        ) {
+          return;
+        }
+
+        if (
+          err.status === 401
+        ) {
+          endSession(
+            'Session expired. Log in again.'
+          );
+        } else {
+          setBoardsError(
+            `Cannot load boards: ${err.message}`
+          );
+        }
+      })
+      .finally(() => {
+        if (
+          !controller.signal.aborted
+        ) {
+          setBoardsBusy(false);
+        }
+      });
+
+    return () =>
+      controller.abort();
+  }, [session, endSession]);
+
+  if (session === null) {
+    return (
+      <main>
+        <h1>
+          Study Board
+        </h1>
+
+        <LoginForm
+          onLogin={handleLogin}
+          busy={loginBusy}
+          error={loginError}
+        />
+      </main>
+    );
+  }
+
+  const selectedBoard =
+    boards.find(
+      board =>
+        board.id ===
+        selectedId
+    );
+
   return (
     <main>
-      <h1>Persistent Notes</h1>
+      <header className="app-header">
+        <h1>
+          Study Board
+        </h1>
 
-      <p>
-        React, Express, and MongoDB
-      </p>
-
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="new-note">
-          New note
-        </label>
-
-        <input
-          id="new-note"
-          value={text}
-          maxLength={280}
-          disabled={
-            loading ||
-            saving ||
-            loadFailed
+        <p>
+          Signed in as{' '}
+          {
+            session.user
+              .username
           }
-          onChange={(event) =>
-            setText(event.target.value)
-          }
-        />
+        </p>
 
         <button
-          type="submit"
-          disabled={
-            loading ||
-            saving ||
-            loadFailed
+          type="button"
+          onClick={() =>
+            endSession()
           }
         >
-          {saving
-            ? 'Saving...'
-            : 'Add note'}
+          Log out
         </button>
-      </form>
+      </header>
 
-      {error && (
-        <p role="alert">
-          {error}
+      {boardsBusy && (
+        <p role="status">
+          Loading boards...
         </p>
       )}
 
-      {loading ? (
-        <p>Loading notes...</p>
-      ) : loadFailed ? (
-        <p>
-          Notes unavailable.
-          Reload to retry.
+      {boardsError && (
+        <p role="alert">
+          {boardsError}
         </p>
-      ) : (
-        <NotesList notes={notes} />
+      )}
+
+      <BoardList
+        boards={boards}
+        selectedId={selectedId}
+        onSelect={
+          setSelectedId
+        }
+      />
+
+      {selectedBoard && (
+        <StudyBoardPanel
+          key={
+            selectedBoard.id
+          }
+          board={
+            selectedBoard
+          }
+          token={
+            session.token
+          }
+          userId={
+            session.user.id
+          }
+          onUnauthorized={
+            endSession
+          }
+        />
       )}
     </main>
   );
 }
-
