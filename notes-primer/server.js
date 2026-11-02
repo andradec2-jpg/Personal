@@ -5,6 +5,7 @@ import { PrimerUser } from './models/PrimerUser.js';
 import { authRouter } from './routes/auth.js';
 import { privateNotesRouter } from './routes/privateNotes.js';
 import { requireAuth } from './middleware/requireAuth.js';
+import { studyRouter } from './routes/study.js';
 
 const app = express();
 
@@ -47,6 +48,13 @@ app.use(
   requireDatabase,
   requireAuth,
   privateNotesRouter
+);
+
+app.use(
+  '/api/study',
+  requireDatabase,
+  requireAuth,
+  studyRouter
 );
 
 app.use('/api/examples/notes', (_req, res, next) => {

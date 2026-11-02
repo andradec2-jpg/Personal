@@ -178,3 +178,89 @@ studyRouter.post(
 	}
   }
 );
+
+studyRouter.get(
+  '/boards/:boardId/entries',
+  async (req, res, next) => {
+    try {
+      const board =
+        await memberBoard(
+          req.params.boardId,
+          req.auth.userId
+        );
+
+      if (board === null) {
+        return res.status(404).json({
+          error: 'board not found'
+        });
+      }
+
+      const before = req.query.before;
+
+      const query = {
+        board: board._id
+      };
+
+      if (before !== undefined) {
+        if (
+          typeof before !== 'string' ||
+          !objectIdPattern.test(before)
+        ) {
+          return res.status(400).json({
+            error: 'invalid cursor'
+          });
+        }
+
+        const anchor =
+          await StudyEntry.findOne({
+            _id: before,
+            board: board._id
+          })
+            .select('createdAt')
+            .lean();
+
+        if (anchor === null) {
+          return res.status(400).json({
+            error: 'invalid cursor'
+          });
+        }
+
+        query.$or = [
+          {
+            createdAt: {
+              $lt: anchor.createdAt
+            }
+          },
+          {
+            createdAt: anchor.createdAt,
+            _id: {
+              $lt: anchor._id
+            }
+          }
+        ];
+      }
+
+     const docs =
+        await StudyEntry.find(query)
+          .sort({
+            createdAt: -1,
+            _id: -1
+          })
+          .limit(6)
+          .lean();
+
+      const page = docs.slice(0, 5);
+
+      return res.status(200).json({
+        entries: page.map(viewEntry),
+        nextBefore:
+          docs.length > 5
+            ? page.at(-1)._id.toString()
+            : null
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
