@@ -6,8 +6,22 @@ import { authRouter } from './routes/auth.js';
 import { privateNotesRouter } from './routes/privateNotes.js';
 import { requireAuth } from './middleware/requireAuth.js';
 import { studyRouter } from './routes/study.js';
+import { createServer } from 'node:http';
+import { Server } from 'socket.io';
+import { attachStudySockets }
+  from './realtime/studySockets.js';
 
 const app = express();
+
+const httpServer =
+  createServer(app);
+
+const io =
+  new Server(httpServer);
+
+attachStudySockets(io);
+
+app.set('studyIo', io);
 
 app.use(express.json({ limit: '16kb' }));
 
@@ -143,11 +157,18 @@ try {
 
   await PrimerUser.init();
 
-  app.listen(3000, '127.0.0.1', () => {
-    console.log(
-      'Listening on http://127.0.0.1:3000'
-    );
-  });
+  httpServer.listen(
+   3000,
+   '127.0.0.1',
+   () => {
+     console.log(
+       'Listening on http://127.0.0.1:3000'
+     );
+   }
+ );
+
+
+
 } catch (err) {
   console.error(
     'MongoDB connection failed:',
