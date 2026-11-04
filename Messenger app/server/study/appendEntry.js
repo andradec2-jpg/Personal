@@ -4,7 +4,7 @@ import { normalizedBody } from './input.js';
 
 const idPattern = /^[0-9a-f]{24}$/i;
 
-export function studyBoardRoom(boardId) {
+export function conversationRoom(boardId) {
   return `study:board:${boardId}`;
 }
 

@@ -173,6 +173,14 @@ export default function App() {
         selectedId
     );
 
+
+console.log(
+  'selectedConversation',
+  selectedConversation
+);
+
+
+
   return (
     <main>
       <header className="app-header">
@@ -223,8 +231,8 @@ export default function App() {
           key={
             selectedConversation.id
           }
-          conversation={
-            selectedConversation
+          conversationId={
+            selectedConversation.id
           }
           token={
             session.token

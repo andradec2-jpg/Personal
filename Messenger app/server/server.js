@@ -5,7 +5,6 @@ import { PrimerUser } from './models/PrimerUser.js';
 import { authRouter } from './routes/auth.js';
 import { privateNotesRouter } from './routes/privateNotes.js';
 import { requireAuth } from './middleware/requireAuth.js';
-import { studyRouter } from './routes/study.js';
 import { createServer } from 'node:http';
 import { Server } from 'socket.io';
 import { attachStudySockets }

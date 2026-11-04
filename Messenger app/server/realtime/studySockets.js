@@ -3,13 +3,13 @@ import jwt from 'jsonwebtoken';
 import { verifyAccessToken }
   from '../auth/token.js';
 
-import { StudyBoard }
-  from '../models/StudyBoard.js';
+import { Message }
+  from '../models/Message.js';
 
 import {
-  appendStudyEntry,
-  studyBoardRoom
-} from '../study/appendEntry.js';
+  appendMessage,
+  conversationRoom
+} from '../conversations/appendMessage.js';
 
 const idPattern =
   /^[0-9a-f]{24}$/i;
@@ -65,18 +65,18 @@ export function attachStudySockets(io) {
       }
     );
     socket.on(
-      'study:join',
+      'conversation:join',
       async (payload, ack) => {
         if (typeof ack !== 'function') {
           return;
         }
 
-        const boardId =
-          payload?.boardId;
+        const conversationId =
+          payload?.conversationId;
 
         if (
-          typeof boardId !== 'string' ||
-          !idPattern.test(boardId)
+          typeof conversationId !== 'string' ||
+          !idPattern.test(conversationId)
         ) {
           ack({
             ok: false,
@@ -87,16 +87,34 @@ export function attachStudySockets(io) {
         }
 
         try {
-          const board =
-            await StudyBoard.findOne({
-              _id: boardId,
+
+console.log(
+  'JOIN PAYLOAD',
+  payload
+);
+console.log(
+  'SOCKET USER',
+  socket.data.userId
+);
+
+
+          const conversation =
+            await Conversation.findOne({
+              _id: conversationId,
               members:
                 socket.data.userId
             })
               .select('_id')
               .lean();
 
-          if (board === null) {
+console.log(
+  'CONVERSATION RESULT',
+  conversation
+);
+
+
+
+          if (conversation === null) {
             ack({
               ok: false,
               code: 'not_found'
@@ -105,11 +123,11 @@ export function attachStudySockets(io) {
             return;
           }
       	await socket.join(
-        	studyBoardRoom(boardId)
+        	conversationRoom(conversationId)
       	);
       	ack({
         	ok: true,
-        	boardId
+        	conversationId
       	});
     	} catch {
       	ack({
@@ -119,16 +137,17 @@ export function attachStudySockets(io) {
     	}
   	}
 	);
+
 	socket.on(
-  	'study:post',
+  	'message:send',
   	async (payload, ack) => {
     	if (typeof ack !== 'function') {
       	return;
     	}
     	try {
       	const result =
-        	await appendStudyEntry(
-          	payload?.boardId,
+        	await appendMessage(
+          	payload?.conversationId,
           	socket.data.userId,
           	payload?.body
         	);
@@ -138,17 +157,23 @@ export function attachStudySockets(io) {
       	}
       	ack({
         	ok: true,
-        	entry: result.entry
+        	message: result.message
       	});
       	io.to(
-        	studyBoardRoom(
-          	result.entry.boardId
+        	conversationRoom(
+          	result.message.conversationId
         	)
       	).emit(
-        	'study:entry',
-        	result.entry
+        	'message:new',
+        	result.message
       	);
-    	} catch {
+    	} catch (err) {
+
+console.error(
+  'JOIN ERROR',
+  err
+  );
+
       	ack({
         	ok: false,
         	code: 'server_error'
@@ -157,13 +182,13 @@ export function attachStudySockets(io) {
   	}
 	);
 	socket.on(
-  	'study:leave',
+  	'conversation:leave',
   	(payload, ack) => {
-    	const boardId =
-      	payload?.boardId;
+    	const conversationId =
+      	payload?.conversationId;
     	if (
-      	typeof boardId !== 'string' ||
-      	!idPattern.test(boardId)
+      	typeof conversationId !== 'string' ||
+      	!idPattern.test(conversationId)
     	) {
       	if (
         	typeof ack === 'function'
@@ -176,7 +201,7 @@ export function attachStudySockets(io) {
       	return;
     	}
     	socket.leave(
-      	studyBoardRoom(boardId)
+      	conversationRoom(conversationId)
     	);
     	if (
       	typeof ack === 'function'

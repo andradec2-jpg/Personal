@@ -160,7 +160,7 @@ useEffect(() => {
     'connect_error',
     err => {
       setError(
-        `Socket unavailable: ${err.message}`
+        'Socket unavailable: ${err.message}'
       );
     }
   );
@@ -190,7 +190,7 @@ socket.on(
         joined.ok === false
       ) {
         setError(
-          'Conversation join failed: ${joined.code}'
+	  `Conversation join failed: ${joined.code}`
         );
         socket.disconnect();
         return;

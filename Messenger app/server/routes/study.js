@@ -12,7 +12,7 @@ import {
 
 import {
   appendStudyEntry,
-  studyBoardRoom
+  conversationRoom
 } from '../study/appendEntry.js';
 
 export const studyRouter = Router();
@@ -173,7 +173,7 @@ studyRouter.post(
       req.app
         .get('studyIo')
         .to(
-          studyBoardRoom(
+          conversationRoom(
             result.entry.boardId
           )
         )
