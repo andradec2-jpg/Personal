@@ -7,8 +7,8 @@ import { privateNotesRouter } from './routes/privateNotes.js';
 import { requireAuth } from './middleware/requireAuth.js';
 import { createServer } from 'node:http';
 import { Server } from 'socket.io';
-import { attachStudySockets }
-  from './realtime/studySockets.js';
+//import { attachStudySockets }
+  //from './realtime/studySockets.js';
 import {
   conversationsRouter
 } from './routes/conversations.js';
@@ -28,14 +28,12 @@ attachConversationSockets(
   io
 );
 
-attachStudySockets(io);
-
 app.set(
   'conversationIo',
   io
 );
 
-app.set('studyIo', io);
+//app.set('studyIo', io);
 
 app.use(express.json({ limit: '16kb' }));
 
@@ -78,12 +76,12 @@ app.use(
   privateNotesRouter
 );
 
-app.use(
-  '/api/study',
-  requireDatabase,
-  requireAuth,
-  studyRouter
-);
+//app.use(
+  //'/api/study',
+//  requireDatabase,
+  //requireAuth,
+//  studyRouter
+//);
 
 app.use(
   '/api/conversations',
