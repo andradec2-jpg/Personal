@@ -27,6 +27,11 @@ export default function ConversationPanel({
   ] = useState(null);
 
   const [
+    socketStatus,
+    setSocketStatus
+  ] = useState('connecting');
+
+  const [
     messages,
     setMessages
   ] = useState([]);
@@ -159,6 +164,11 @@ useEffect(() => {
   socket.on(
     'connect_error',
     err => {
+
+      setSocketStatus(
+        'offline'
+      );
+
       setError(
         'Socket unavailable: ${err.message}'
       );
@@ -195,6 +205,9 @@ socket.on(
         socket.disconnect();
         return;
       }
+
+      setSocketStatus('live');
+
       const result =
         await listMessages(
           token,
@@ -213,6 +226,15 @@ socket.on(
       );
      socket.disconnect();
     }
+  }
+);
+
+socket.on(
+  'disconnect',
+  () => {
+    setSocketStatus(
+      'offline'
+    );
   }
 );
 
@@ -256,7 +278,8 @@ socket.on(
           
 	  const socket =
 	    socketRef.current;
-	  if (socket?.connected  ) {
+
+	  if (!socket?.connected  ) {
 	    throw new Error(
 		'Conversation is offline'
 	    );

@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   normalizedBody
-} from '../study/input.js';
+} from '../conversations/input.js';
 test(
   'blank body rejected',
   () => {
