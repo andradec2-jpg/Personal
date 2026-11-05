@@ -5,7 +5,8 @@ import {
 
 import {
   listUsers,
-  createDirectConversation
+  createDirectConversation,
+  createGroupConversation
 } from './messengerApi.js';
 
 export default function CreateConversationForm({
@@ -219,18 +220,7 @@ export default function CreateConversationForm({
     </label>
 
     {conversationType ===
-      'group' && (
-	<input
-	  placeholder="Group Name"
-	  value={groupTitle}
-	  onChange={event =>
-	    setGroupTitle(
-	      event.target.value
-	    )
-	  }
-	/>
-    )}
-
+      'direct' && (
       <select
         value={selectedUserId}
         onChange={event =>
@@ -252,15 +242,76 @@ export default function CreateConversationForm({
           </option>
         ))}
       </select>
+     )}
 
+    {conversationType ===
+      'group' && (
+	<input
+	  placeholder="Group Name"
+	  value={groupTitle}
+	  onChange={event =>
+	    setGroupTitle(
+	      event.target.value
+	    )
+	  }
+	/>
+    )}
 
+    {conversationType ===
+      'group' && (
 
+      <div>
+
+	{users.map(user => (
+
+	  <label
+	    key={user.id}
+	  >
+
+	    <input
+	      type="checkbox"
+	      checked={
+		selectedUsers.includes(
+		  user.id
+		)
+	      }
+
+	      onChange={() => {
+
+		setSelectedUsers(
+		  current =>
+		    current.includes(
+		      user.id
+		    )
+		      ? current.filter(
+			  id =>
+			    id !==
+			    user.id
+			)
+		      : [
+			  ...current,
+			  user.id
+			]
+		  );
+
+		}}
+	      />
+
+	      {user.username}
+
+	    </label>
+
+	  ))}
+    </div>
+  )}
       <button
         disabled={creating}
       >
         {creating
           ? 'Creating...'
-          : 'Create Direct Message'}
+          : conversationType === 'direct'
+           ? 'Create Direct Message'
+           : 'Create Group Chat'}
       </button>
     </form>
   );
