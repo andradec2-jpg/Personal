@@ -59,6 +59,9 @@ export default function ConversationPanel({
   const socketRef =
     useRef(null);
 
+  const messageRef =
+    useRef(null);
+
   useEffect(() => {
 
     const controller =
@@ -256,6 +259,16 @@ socket.on(
   token
 ]);
 
+useEffect(() => {
+  const container =
+	messagesRef.current;
+  if (!container) {
+	return;
+  }
+  container.scrollTop =
+	container.scrollHeight;
+}, [messages]);
+
 
   async function
   handleSubmit(event) {
@@ -341,7 +354,10 @@ socket.on(
         </p>
       )}
 
-  <div className="message-history">
+  <div 
+    className="message-history"
+    ref={messageRef}
+  >
     <MessageList
       messages={messages}
       userId={userId}
