@@ -10,9 +10,10 @@ body {
 }
 
 main {
-  max-width: 52rem;
-  margin: 2rem auto;
-  padding: 1.5rem;
+  height: 100vh;
+  box-sizing: border-box;
+
+  padding: 1rem;
   background: white;
 }
 
@@ -103,4 +104,56 @@ button[aria-current="page"] {
   color: #384a65;
 }
 
+.messenger-layout {
+  display: flex;
+  gap: 1rem;
+  height: calc(100vh - 120px);
+  overflow: hidden;
+}
+.conversation-sidebar {
+  width: 280px;
+  min-width: 280px;
+  border-right: 1px solid #cccccc;
+  overflow-y: auto;
+  padding-right: 1rem;
+}
+.conversation-main {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+}
+
+.message-history {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  padding: 1rem;
+  border: 1px solid #dddddd;
+}
+
+.conversation-panel {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.conversation-panel form {
+  border-top: 1px solid #cccccc;
+  padding: 1rem;
+  background: white;
+  flex-shrink: 0;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.conversation-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
 

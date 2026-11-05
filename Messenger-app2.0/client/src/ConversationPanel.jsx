@@ -59,6 +59,9 @@ export default function ConversationPanel({
   const socketRef =
     useRef(null);
 
+  const messageRef =
+    useRef(null);
+
   useEffect(() => {
 
     const controller =
@@ -256,6 +259,16 @@ socket.on(
   token
 ]);
 
+useEffect(() => {
+  const container =
+	messageRef.current;
+  if (!container) {
+	return;
+  }
+  container.scrollTop =
+	container.scrollHeight;
+}, [messages]);
+
 
   async function
   handleSubmit(event) {
@@ -326,7 +339,7 @@ socket.on(
   }
   
   return (
-    <section>
+    <section className="conversation-panel">
       <h2>
         {
           conversation
@@ -340,6 +353,16 @@ socket.on(
           {error}
         </p>
       )}
+
+  <div 
+    className="message-history"
+    ref={messageRef}
+  >
+    <MessageList
+      messages={messages}
+      userId={userId}
+    />
+  </div>
       
       <form
         onSubmit={
@@ -368,15 +391,12 @@ socket.on(
           }
         </button>
       </form>
-          
-    <MessageList
-	messages={messages}
-	userId={userId}
-    /> 
 
     </section>
   );
 }
+         
+
 
 function mergeMessages(
   current,
@@ -407,10 +427,10 @@ function mergeMessages(
   ].sort(
     (a, b) =>
       Date.parse(
-        b.createdAt
+        a.createdAt
       ) -
       Date.parse(
-        a.createdAt
+        b.createdAt
       )
   );
 }

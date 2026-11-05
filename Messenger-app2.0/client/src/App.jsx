@@ -15,6 +15,9 @@ import LoginForm
 import ConversationList
   from './ConversationList.jsx';
 
+import CreateConversationForm
+  from './CreateConversationForm.jsx';
+
 import ConversationPanel
   from './ConversationPanel.jsx';
 
@@ -41,6 +44,11 @@ export default function App() {
   ] = useState(null);
 
   const [
+    creatingConversation,
+    setCreatingConversation
+  ] = useState(false);
+
+  const [
     conversationsBusy,
     setConversationsBusy
   ] = useState(false);
@@ -54,7 +62,7 @@ export default function App() {
     useCallback(
       (message = '') => {
         setSession(null);
-        setconversations([]);
+        setConversations([]);
         setSelectedId(null);
         setLoginError(message);
       },
@@ -173,14 +181,6 @@ export default function App() {
         selectedId
     );
 
-
-console.log(
-  'selectedConversation',
-  selectedConversation
-);
-
-
-
   return (
     <main>
       <header className="app-header">
@@ -218,33 +218,80 @@ console.log(
         </p>
       )}
 
+
+  <div className="messenger-layout">
+
+    <aside className="conversation-sidebar">
       <ConversationList
-        conversations={conversations}
-        selectedId={selectedId}
-        onSelect={
-          setSelectedId
+	conversations={conversations}
+	selectedId={selectedId}
+	onSelect={setSelectedId}
+        onCreateConversation={() =>
+          setCreatingConversation(
+            current => !current
+          )
         }
       />
+     </aside>
 
-      {selectedConversation && (
-        <ConversationPanel
-          key={
-            selectedConversation.id
-          }
-          conversationId={
-            selectedConversation.id
-          }
-          token={
-            session.token
-          }
-          userId={
-            session.user.id
-          }
-          onUnauthorized={
-            endSession
-          }
+     <section className="conversation-main">
+
+       {creatingConversation && (
+         <CreateConversationForm
+           token={session.token}
+           currentUserId={session.user.id}
+	   onCreated={conversation => {
+
+	     setConversations(
+	        current => {
+
+		  const exists = 
+		    current.some(
+		      candidate =>
+			candidate.id ===
+			conversation.id
+		    );
+		  if (exists) {
+		    return current;
+		  }
+
+		  return [
+		    conversation,
+		    ...current
+		  ];
+		}
+	      );
+
+	      setSelectedId(
+		conversation.id
+	      );
+
+	      setCreatingConversation(
+		false
+	      );
+	    }}
+	  />
+        )}
+
+
+
+
+
+       {selectedConversation && (
+	<ConversationPanel
+	  key={selectedConversation.id}
+	  conversationId={selectedConversation.id}
+	  token={session.token}
+	  userId={session.user.id}
+	  onUnauthorized={endSession}
         />
       )}
-    </main>
-  );
+
+    </section>
+
+  </div>
+
+
+  </main>
+ );
 }

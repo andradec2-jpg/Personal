@@ -62,6 +62,44 @@ async function memberConversation(
 }
 
 conversationsRouter.get(
+  '/users',
+  async (
+	req,
+	res,
+	next
+  ) => {
+	try {
+  	const users =
+    	await PrimerUser
+      	.find({})
+      	.select(
+        	'_id username'
+      	)
+      	.sort({
+        	username: 1
+      	})
+      	.lean();
+  	return res
+    	.status(200)
+    	.json({
+      	users:
+        	users.map(
+          	user => ({
+            	id:
+              	user._id
+                	.toString(),
+            	username:
+              	user.username
+          	})
+        	)
+    	});
+	} catch (err) {
+  	next(err);
+	}
+  }
+);
+
+conversationsRouter.get(
   '/',
   async (
 	req,

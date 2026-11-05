@@ -1,7 +1,8 @@
 export default function ConversationList({
   conversations,
   selectedId,
-  onSelect
+  onSelect,
+  onCreateConversation
 }) {
   if (conversations.length === 0) {
 	return (
@@ -14,9 +15,20 @@ export default function ConversationList({
     <nav
       aria-label="Your conversations"
     >
+    <div className="conversation-header">
       <h2>
         Conversations
       </h2>
+
+      <button
+        type="button"
+        onClick={
+          onCreateConversation
+        }
+      >
+        + New
+      </button>
+    </div>
 
       <ul>
         {conversations.map(

@@ -145,3 +145,50 @@ export function sendMessage(
 	}
   );
 }
+
+export function listUsers(
+  token,
+  signal
+) {
+  return requestJson(
+	'/api/conversations/users',
+	{
+  	token,
+  	signal
+	}
+  );
+}
+
+export function createDirectConversation(
+  token,
+  username
+) {
+  return requestJson(
+	'/api/conversations/direct',
+	{
+  	token,
+  	method: 'POST',
+  	body: {
+    	username
+  	}
+	}
+  );
+}
+export function createGroupConversation(
+  token,
+  title,
+  members
+) {
+  return requestJson(
+	'/api/conversations/group',
+	{
+  	token,
+  	method: 'POST',
+  	body: {
+    	title,
+    	members
+  	}
+	}
+  );
+}
+
