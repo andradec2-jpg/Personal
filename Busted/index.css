@@ -1,0 +1,142 @@
+:root {
+  font-family: system-ui, sans-serif;
+  line-height: 1.5;
+}
+
+body {
+  margin: 0;
+  background: #f6f7f9;
+  color: #19222e;
+}
+
+main {
+  max-width: 52rem;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: white;
+}
+
+.app-header {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.app-header h1 {
+  margin-right: auto;
+}
+
+label {
+  display: block;
+  margin-top: 0.9rem;
+}
+
+input,
+textarea,
+select,
+button {
+  font: inherit;
+  padding: 0.5rem;
+  margin: 0.2rem 0.5rem 0.2rem 0;
+}
+
+input,
+textarea {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+textarea {
+  display: block;
+  width: 100%;
+  min-height: 4.5rem;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+button[aria-current="page"] {
+  outline: 2px solid #205fbd;
+}
+
+.entries {
+  list-style: none;
+  padding: 0;
+}
+
+.entries li {
+  border-top: 1px solid #ddd;
+  padding: 0.7rem 0;
+}
+
+.entries time {
+  display: block;
+  color: #485363;
+  font-size: 0.85rem;
+}
+
+.entries p {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+[role="alert"] {
+  color: #9d1a23;
+}
+
+[role="status"] {
+  color: #384a65;
+}
+
+.messenger-layout {
+  display: flex;
+  gap: 1rem;
+  height: calc(100vh - 120px);
+}
+.conversation-sidebar {
+  width: 280px;
+  min-width: 280px;
+  border-right: 1px solid #cccccc;
+  overflow-y: auto;
+  padding-right: 1rem;
+}
+.conversation-main {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+}
+
+.message-history {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  padding: 1rem;
+}
+
+.conversation-panel form {
+  border-top: 1px solid #cccccc;
+  padding: 1rem;
+  background: white;
+  flex-shrink: 0;
+  display: flex;
+  gap: 0.5rem;
+}
+

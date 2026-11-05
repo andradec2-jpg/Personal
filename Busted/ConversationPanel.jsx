@@ -326,7 +326,7 @@ socket.on(
   }
   
   return (
-    <section>
+    <section className="conversation-panel">
       <h2>
         {
           conversation
@@ -341,10 +341,12 @@ socket.on(
         </p>
       )}
 
+  <div className="message-history">
     <MessageList
-        messages={messages}
-        userId={userId}
+      messages={messages}
+      userId={userId}
     />
+  </div>
       
       <form
         onSubmit={
@@ -373,8 +375,10 @@ socket.on(
           }
         </button>
       </form>
-  );
 
+    </section>
+  );
+}
          
 
 
