@@ -2,6 +2,8 @@ export default function ConversationList({
   conversations,
   selectedId,
   onSelect,
+  currentUserId,
+  userLookup,
   onCreateConversation
 }) {
 
@@ -56,9 +58,16 @@ export default function ConversationList({
                 }
               >
                 {
-                  conversation.type ===
-                  'direct'
-                    ? 'Direct Conversation'
+                  conversation.type === 'direct'
+		    ? (
+			userLookup?.[
+			  conversation.members.find(
+			    memberId =>
+			      memberId !==
+			      currentUserId
+			  )
+		        } ?? 'Direct Conversation'
+		      )
                     : conversation.title
                 }
               </button>
@@ -66,7 +75,8 @@ export default function ConversationList({
           )
         )}
       </ul>
-    </nav>
+    )}
+  </nav>
   );
 }
 
