@@ -6,6 +6,7 @@ import {
 
 import {
   login,
+  register,
   listConversations
 } from './messengerApi.js';
 
@@ -20,6 +21,9 @@ import CreateConversationForm
 
 import ConversationPanel
   from './ConversationPanel.jsx';
+
+import { io }
+  from 'socket.io-client';
 
 export default function App() {
   const [session, setSession] =
@@ -96,6 +100,44 @@ export default function App() {
     }
   }
 
+  async function handleRegister(
+    username,
+    password
+  ) {
+
+    setLoginBusy(true);
+
+    setLoginError('');
+
+    try {
+      await register(
+	username,
+	password
+      );
+
+      const loginResult =
+	await login(
+	  username,
+	  password
+	);
+
+      setSession({
+	token:
+	  loginResult.token,
+	user:
+	  loginResult.user
+	});
+  } catch (err) {
+    setLoginError(
+      err.message
+    );
+
+  } finally {
+    setLoginBusy(false);
+  }
+}
+
+
   useEffect(() => {
     if (session === null) {
       return;
@@ -158,6 +200,54 @@ export default function App() {
       controller.abort();
   }, [session, endSession]);
 
+useEffect(() => {
+
+  if (session === null) {
+	return;
+  }
+
+  const socket =
+    io({
+      auth: {
+        token:
+          session.token
+      }
+    });
+
+  socket.on(
+    'conversation:new',
+    conversation => {
+
+      setConversations(
+        current => {
+
+	  const exists =
+	    current.some(
+	      item =>
+		item.id ===
+		conversation.id
+	    );
+
+	  if (exists) {
+	    return current;
+	  }
+
+	  return [
+	    conversation,
+	    ...current
+	  ];
+	}
+      );
+
+    }
+  );
+ 
+  return () => {
+    socket.disconnect();
+  };
+
+}, [session]);
+
   if (session === null) {
     return (
       <main>
@@ -167,6 +257,7 @@ export default function App() {
 
         <LoginForm
           onLogin={handleLogin}
+	  onRegister={handleRegister}
           busy={loginBusy}
           error={loginError}
         />

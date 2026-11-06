@@ -79,6 +79,7 @@ conversationsRouter.get(
         	username: 1
       	})
       	.lean();
+
   	return res
     	.status(200)
     	.json({
@@ -147,6 +148,7 @@ conversationsRouter.post(
   	typeof username !==
   	'string'
 	) {
+
   	return res
     	.status(400)
     	.json({
@@ -196,6 +198,29 @@ conversationsRouter.post(
           	]
         	});
   	}
+
+const io =
+  req.app.get(
+    'conversationIo'
+  );
+
+const view =
+  viewConversation(
+    conversation
+  );
+
+conversation.members
+  .forEach(memberId => {
+
+    io.to(
+      `user:${memberId}`
+    ).emit(
+      'conversation:new',
+      view
+    );
+
+  });
+
   	return res
     	.status(200)
     	.json({
@@ -310,6 +335,28 @@ conversationsRouter.post(
               uniqueIds
           }
         );
+
+const io =
+  req.app.get(
+    'conversationIo'
+  );
+
+const view =
+  viewConversation(
+    conversation
+  );
+
+conversation.members
+  .forEach(memberId => {
+
+    io.to(
+      `user:${memberId}`
+    ).emit(
+      'conversation:new',
+      view
+    );
+
+  });
 
       return res
         .status(201)

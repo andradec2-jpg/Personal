@@ -4,13 +4,7 @@ export default function ConversationList({
   onSelect,
   onCreateConversation
 }) {
-  if (conversations.length === 0) {
-	return (
-	<p>
-	No conversations yet.
-	</p>
-	);
-  }
+
   return (
     <nav
       aria-label="Your conversations"
@@ -28,7 +22,16 @@ export default function ConversationList({
       >
         + New
       </button>
+
     </div>
+
+    {conversations.length === 0 ? (
+
+      <p>
+        No conversations yet.
+      </p>
+
+    ) : (
 
       <ul>
         {conversations.map(
@@ -63,7 +66,8 @@ export default function ConversationList({
           )
         )}
       </ul>
-    </nav>
+    )}
+  </nav>
   );
 }
 

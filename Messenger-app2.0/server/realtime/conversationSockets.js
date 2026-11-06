@@ -16,6 +16,12 @@ import {
 const idPattern =
   /^[0-9a-f]{24}$/i;
 
+function userRoom(
+  userId
+) {
+  return `user:${userId}`;
+}
+
 export function attachConversationSockets(
   io
 ) {
@@ -71,11 +77,18 @@ export function attachConversationSockets(
   io.on(
 	'connection',
 	(socket) => {
+
+  socket.join(
+    userRoom(
+  	  socket.data.userId
+    )
+  );
+
   	const remaining =
     	Math.max(
       	0,
-      	socket.data.expiresAt -
-      	Date.now()
+        socket.data.expiresAt -
+        Date.now()
     	);
   	const expiryTimer =
     	setTimeout(

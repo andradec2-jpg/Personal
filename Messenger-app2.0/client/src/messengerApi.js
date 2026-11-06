@@ -87,6 +87,23 @@ export function login(
 	}
   );
 }
+
+export function register(
+  username,
+  password
+) {
+  return requestJson(
+    '/api/auth/register',
+    {
+      method: 'POST',
+      body: {
+        username,
+        password
+      }
+    }
+  );
+}
+
 export function listConversations(
   token,
   signal
