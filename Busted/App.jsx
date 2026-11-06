@@ -7,7 +7,8 @@ import {
 import {
   login,
   register,
-  listConversations
+  listConversations,
+  listUsers
 } from './messengerApi.js';
 
 import LoginForm
@@ -41,6 +42,9 @@ export default function App() {
 
   const [conversations, setConversations] =
     useState([]);
+
+  const [userLookup, setUserLookup] = 
+    useState({});
 
   const [
     selectedId,
@@ -149,26 +153,51 @@ export default function App() {
     setConversationsBusy(true);
     setConversationsError('');
 
-    listConversations(
-      session.token,
-      controller.signal
-    )
-      .then(result => {
-        if (
-          controller.signal.aborted
-        ) {
-          return;
-        }
+Promise.all([
+  listConversations(
+    session.token,
+    controller.signal
+  ),
+  listUsers(
+    session.token,
+    controller.signal
+  )
+])
+  .then(
+    ([conversationResult,
+      userResult]) => {
 
-        setConversations(
-          result.conversations
-        );
+      if (
+        controller.signal.aborted
+      ) {
+	return;
+      }
 
-        setSelectedId(
-          result.conversations[0]?.id ??
-            null
-        );
-      })
+      setConversations(
+	conversationResult.conversations
+      );
+
+      setSelectedId(
+	conversationResult
+	.conversations[0]?.id ??
+      null
+    );
+
+    const lookup = {};
+
+    userResult.users.forEach(
+      user => {
+        lookup[user.id] =
+	  user.username;
+      }
+    );
+
+    setUserLookup(
+      lookup
+    );
+  }
+)
+
       .catch(err => {
         if (
           controller.signal.aborted
@@ -257,7 +286,7 @@ useEffect(() => {
 
         <LoginForm
           onLogin={handleLogin}
-	  onRegister={handledRegister}
+	  onRegister={handleRegister}
           busy={loginBusy}
           error={loginError}
         />
@@ -317,6 +346,10 @@ useEffect(() => {
 	conversations={conversations}
 	selectedId={selectedId}
 	onSelect={setSelectedId}
+	currentUserId={
+	  session.user.id
+	}
+	userLookup={userLookup}
         onCreateConversation={() =>
           setCreatingConversation(
             current => !current
@@ -363,10 +396,6 @@ useEffect(() => {
 	    }}
 	  />
         )}
-
-
-
-
 
        {selectedConversation && (
 	<ConversationPanel
