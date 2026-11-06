@@ -17,19 +17,24 @@ export const conversationsRouter =
 
 const objectIdPattern =
   /^[0-9a-f]{24}$/i;
-function viewConversation(doc) {
+function viewConversation(doc, usernames = []) {
   return {
-	id: doc._id.toString(),
-	type: doc.type,
-	title: doc.title ?? null,
-	members:
-  	doc.members.map(
-    	id => id.toString()
-  	),
-	createdAt:
-  	doc.createdAt
+    id: doc._id.toString(),
+    type: doc.type,
+    title: doc.title ?? null,
+
+    members:
+      doc.members.map(
+        id => id.toString()
+     ),
+
+    usernames;
+
+    createdAt:
+      doc.createdAt
   };
 }
+
 function viewMessage(doc) {
   return {
 	id: doc._id.toString(),
@@ -118,14 +123,26 @@ conversationsRouter.get(
         	createdAt: -1,
         	_id: -1
       	})
+
+	.populate(
+	  'members',
+	  'username'
+	)
       	.lean();
   	return res
     	.status(200)
     	.json({
       	conversations:
         	docs.map(
-          	viewConversation
-        	)
+		conversation =>
+          	viewConversation(
+		  conversation,
+		  conversation.members.map(
+		    member =>
+		     member.username
+		  )
+		)
+            )
     	});
 	} catch (err) {
   	next(err);

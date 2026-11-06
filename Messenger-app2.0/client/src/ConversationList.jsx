@@ -56,9 +56,11 @@ export default function ConversationList({
                 }
               >
                 {
-                  conversation.type ===
-                  'direct'
-                    ? 'Direct Conversation'
+                  conversation.type === 'direct'
+		    ? conversation.username?.find(
+			name =>
+			  name !== currentUsername
+		      ) ?? 'Direct Conversation'
                     : conversation.title
                 }
               </button>
